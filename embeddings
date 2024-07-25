@@ -4,11 +4,15 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.llms import Ollama
 from langchain.prompts import ChatPromptTemplate
-from langchain_community.embeddings.ollama import OllamaEmbeddings
 
-def get_embbedings_fuction():
+
+
+def create_vectorstores(chunks):
+
     embeddings = HuggingFaceInstructEmbeddings(model_name = "BAAI/bge-small-en" )
-    return embeddings
+    vectorstore = Chroma.from_texts(texts=chunks, embedding=embeddings)
+
+    return vectorstore
 
 
 def create_conversation_chain(vectorstore):
@@ -25,7 +29,10 @@ def create_conversation_chain(vectorstore):
         memory=memory
     )
        
-    
+    ChatPromptTemplate 
+    """ voce é um assistente de desenvolvimento e voce responde as perguntas de acordo com o que lhe foi solicitado sem se perder sem desviar, responda 
+    em portugues e somente em portugues!
+    """
 
 
     return conversation_chain
