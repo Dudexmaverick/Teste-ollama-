@@ -1,7 +1,7 @@
 import streamlit as st
 from utills import text,embeddings
 from streamlit_chat import message
-
+import pandas as pd
 
 
 
@@ -27,20 +27,29 @@ def main():
     
     
     with st.sidebar:
-        st.subheader('seus pdf')
+        st.subheader('seus arq')
+        uploaded_file = st.file_uploader("Faça o upload de um arquivo CSV", type='csv')
+        if uploaded_file is not None:
+            data = pd.read_csv(uploaded_file)
+            st.write(data)
+
+
+
+        df = pd.read_csv("./transcript_table(1).csv")
         
-        pdf_docs = st.file_uploader("faça o carregamento de seus pdf", accept_multiple_files= True)
-    
-   
-        if st.button('processar'):
-            all_files_text = text.process_files(pdf_docs)
+        leitor_csv = st.file_uploader("faça o carregamento de seus arquivos ")
+    def convert_df(df):
+        return df.to_csv(index = False).encode('utf-8')
+    csv = convert_df(df)
 
-            chunks = text.create_text_chunks(all_files_text)
+    st.download_button(
+        "press to Download",
+        csv, "file.csv")
+    chunks = text.create_chunks()
 
-            vectorstore = embeddings.create_vectorstores(chunks)
-
-            st.session_state.conversation = embeddings.create_conversation_chain(vectorstore)
-
+    vectorstore = embeddings.create_vectorstores(chunks)
+    st.session_state.conversation = embeddings.create_conversation_chain(vectorstore)
 
 if __name__ == '__main__':
     main()
+ 
